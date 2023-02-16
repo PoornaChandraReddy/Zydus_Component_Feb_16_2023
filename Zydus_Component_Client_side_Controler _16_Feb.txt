@@ -1,0 +1,85 @@
+({
+	addRow: function(component, event, helper) {
+        //get the account List from component  
+        var sObjList = component.get("v.objList");
+          var name = component.get("v.nameAttr");
+        //Add New Account Record
+        sObjList.push({
+            'sobjectType': 'sObject',
+            'Name': '',
+            'Descrition': '',
+            'Quantity': '',
+            'Remarks ': '', 
+            'SelectedStoreTest':'',
+        });
+          //alert('sObjList---'+sObjList);
+        //console.log("sObjList----------"+sObjList);
+        component.set("v.objList", sObjList);
+    },
+      saveAccounts: function(component, event, helper) {      
+       var obj = component.get("v.objList");
+         
+          //alert('obj---'+obj);
+           component.set("v.objectList",obj);
+          //alert('objectList------');
+         
+      },
+    
+    removeRecord: function(component, event, helper){
+         //Get the  list
+          var obj = component.get("v.objList");
+       
+        //Get the selected item index
+         var selectedItem = event.currentTarget;
+       
+        //Get the selected item index
+        var index = selectedItem.dataset.record;
+        
+        //Remove single record from obj list
+         obj.splice(index, 1);
+         
+         //Set modified account list
+         component.set("v.objList", obj);
+        
+        
+          
+      },
+   
+ init: function (component, event, helper) {
+     
+       
+      var action = component.get("c.fetchSupplier");
+        
+        action.setCallback(this, function(response){
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                component.set("v.StoreList", response.getReturnValue());
+                //cmp.set('v.selectedValue', serverResponse.getReturnValue());
+            }
+             });
+     $A.enqueueAction(action);
+     /* helper.simulateServerRequest(
+            $A.getCallback(function handleServerResponse(serverResponse) {
+                //alert('value--'+serverResponse);
+                cmp.set('v.options', serverResponse.colors);
+                // alert('options---'+serverResponse.colors);
+
+                cmp.set('v.selectedValue', serverResponse.selectedColorId);
+            })
+        );*/
+    },
+    
+    onOptionSelected: function (cmp, event, helper) {
+        var index = cmp.find("idSelectOptions").get("v.value");
+        //alert('ndx---'+index);
+         var arraySuppliers = [];
+        arraySuppliers = cmp.get("v.SelectedStore");
+        var changedItem = arraySuppliers [index-1];
+        // alert('valueforChage'+changedItem);
+         //changedItem.wSelected = !changedItem.wSelected;
+        //[index-1] = changedItem;
+        cmp.set("v.SelectedStore",arraySuppliers);
+        //alert('SelectedStore----'+arraySuppliers);
+    }
+    
+})
