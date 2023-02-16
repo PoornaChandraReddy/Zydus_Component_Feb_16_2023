@@ -1,0 +1,15 @@
+public class Supplier_Controller {
+   
+    @AuraEnabled
+    public static list<SuppliersInformation__c> fetchSupplier(){
+        return[select id,name from SuppliersInformation__c ];
+        
+    }
+}
+
+Zydus_Application:
+
+<aura:application extends="force:slds">
+    <c.Zydeus_Component/>
+   <c:CustomLookup/>
+</aura:application>
