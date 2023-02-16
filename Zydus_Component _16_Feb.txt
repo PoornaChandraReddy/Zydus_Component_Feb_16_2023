@@ -1,0 +1,144 @@
+<aura:component controller="Supplier_Controller">
+    <aura:attribute name="nameAttr" type="String"/>
+    <aura:attribute name="descrptionAttr" type="String"/>
+    <aura:attribute name="quantityAttr" type="String"/>
+    <aura:attribute name="remarksAttr" type="String"/>
+    <!--aura:attribute name="Inputlst" type="String[]" default="['Name','Description','Quantity','Remarks']"/-->
+    <aura:attribute name="objList" type="sObject[]"/>
+    <aura:attribute name="objectList" type="sObject[]"/>
+    <!--<aura:attribute name="options" type="List" access="PRIVATE"/>
+    <aura:attribute name="selectedValue" type="String" access="PRIVATE"/>-->
+    <aura:attribute name="StoreList" type="list"/>
+    <aura:attribute name="SelectedStore" type="SuppliersInformation__c[]" />
+    <aura:attribute name="SelectedStoreTest" type="String" />     <!--Just changed into string-->
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <lightning:card>
+        <div class="slds-m-around_xx-large">
+            <div class="slds-float_right slds-p-bottom_small" >
+                <h1 class="slds-page-header__title">Add Row 
+                    <lightning:buttonIcon iconName="utility:add"  size="large" variant="bare" alternativeText="Add" onclick="{!c.addRow}"/>
+                </h1>
+            </div>
+            <div class="container-fluid">
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer" >
+                    <thead>
+                        <tr class="slds-text-title_caps ">
+                            <th scope="col">
+                                <div class="slds-truncate">Sr. No</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate"  title="Name" >Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate"  title="Description" >Description</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate"  title="Quantity" >Quantity</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate"  title="Remarks" >Remarks</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate"  title="Supplier" >Supplier</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate"  title="Action" >Action</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.objList}" var="obj" indexVar="index">
+                            <tr>
+                                <td>
+                                    {!index + 1}
+                                </td>
+                                <td>
+                                    <lightning:input name="Name" type="text" maxlength="30" value="{!obj.Name}" />
+                                </td>
+                                <td>
+                                    <lightning:input name="Description" type="text" maxlength="30" value="{!obj.Description}" />
+                                </td>
+                                <td>
+                                    <lightning:input name="Quantity" type="text" maxlength="30" value="{!obj.Quantity}" />
+                                </td>
+                                <td>
+                                    <lightning:input name="Remarks" type="text" maxlength="30" value="{!obj.Remarks}" />
+                                </td>
+                                <td>
+                                    <lightning:select  aura:id="idSelectOptions" label="Select Supplier" name="store" value="{!obj.SelectedStoreTest}">
+                                        <option value="{!null}">Choose the Supplier</option>
+                                        <aura:iteration items="{!v.StoreList}" var="Store"  >
+                                            <option text="{!Store.Name}"  ></option>    <!--Modified here-->
+                                          <!-- <option value="{!Store.name}" label="{!Store.Name}" text="{!Store}"  ></option>-->
+                                            <!--<option value="{!Store.name}" label="{!Store.Name}" />-->
+                                        </aura:iteration>
+                                    </lightning:select>                                   
+                                </td>
+                                <td>
+                                    <a onclick="{!c.removeRecord}" data-record="{!index}">
+                                        <lightning:icon iconName="utility:delete" size="small" alternativeText="Delete"/>
+                                        <span class="slds-assistive-text">Delete</span>   
+                                    </a>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+                <div class="slds-align_absolute-center slds-p-top_small">
+                    <lightning:button variant="brand" label="Submit" title="Brand action" onclick="{!c.saveAccounts}" />
+                </div><br/><br/><br/>
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer" >
+                      <thead>
+                          <tr class="slds-text-title_caps ">
+                              <!--<th scope="col">
+                                   <div class="slds-truncate">Sr. No</div>
+                              </th>-->
+                              <th scope="col" >
+                                   <div class="slds-truncate"  title="Name" >Name</div>
+                              </th>
+                              <th scope="col">
+                                   <div class="slds-truncate"  title="Description" >Description</div>
+                              </th>
+                              <th scope="col">
+                                   <div class="slds-truncate"  title="Quantity" >Quantity</div>
+                              </th>
+                              <th scope="col">
+                                   <div class="slds-truncate"  title="Remarks" >Remarks</div>
+                              </th>
+                              <th scope="col">
+                                   <div class="slds-truncate"  title="Supplier" >Supplier</div>
+                              </th>
+                             
+                          </tr>
+                     </thead>
+                     <tbody>
+                            <aura:iteration items="{!v.objectList}" var="ob" indexVar="index">
+                               <tr>
+                                   <!--<td>
+                                       {!!index + 1}
+                                   </td>-->
+                                   <td>
+                                       {!ob.Name}
+                                   </td>
+                                   <td>
+                                       {!ob.Description}
+                                   </td>
+                                   <td>
+                                       {!ob.Quantity}
+                                   </td>
+                                   <td>
+                                       {!ob.Remarks}
+                                   </td>
+                                   <td>
+                                       {!ob.SelectedStoreTest}
+                                   </td>
+
+                               </tr>
+                         </aura:iteration>
+                     </tbody>
+                </table>
+            </div>
+        </div>      
+    </lightning:card>
+    
+</aura:component>
